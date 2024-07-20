@@ -82,6 +82,16 @@
 }
 
 
+body {
+  overflow-x: hidden;
+}
+@media (max-width:500px) {
+  .listtt {
+      position: absolute;
+      left: -4rem !important;
+      width: 100vw;
+  }
+}
 
 .save {
   background-color: red;

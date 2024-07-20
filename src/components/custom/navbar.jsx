@@ -10,8 +10,6 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-
-
   return (
 
 
@@ -186,7 +184,7 @@ const Navbar = () => {
     </svg>
   </button>
   <div
-        className={`bg-white -end-[13px] max-h-[412px] w-[390px] origin-top-right rtl:origin-top-left absolute top-full z-10 flex origin-top flex-col overflow-hidden rounded-lg bg-bg-popup shadow-[0px_9px_28px_8px_rgba(0,0,0,0.05)] md:bg-bg-dropdown-panel transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
+        className={`listtt bg-white -end-[13px] max-h-[412px] w-[390px] origin-top-right rtl:origin-top-left absolute top-full z-10 flex origin-top flex-col overflow-hidden rounded-lg bg-bg-popup shadow-[0px_9px_28px_8px_rgba(0,0,0,0.05)] md:bg-bg-dropdown-panel transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
         tabIndex={0}
       >
     <div className="overflow-y-auto">
@@ -306,7 +304,8 @@ const Navbar = () => {
       </div>
     </div>
     <div className="p-6">
-      <button className="save inline-flex items-center justify-center gap-1.5 rounded-md border py-1 text-center leading-none transition-colors border-primary-red bg-primary-red text-white hover:bg-primary-red-hover hover:border-primary-red-hover px-5 text-sm font-bold h-10 w-full">
+      <button onClick={toggleMenu}
+       className="save inline-flex items-center justify-center gap-1.5 rounded-md border py-1 text-center leading-none transition-colors border-primary-red bg-primary-red text-white hover:bg-primary-red-hover hover:border-primary-red-hover px-5 text-sm font-bold h-10 w-full">
         حفظ
       </button>
     </div>
