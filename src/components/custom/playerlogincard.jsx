@@ -8,9 +8,24 @@ import { ChevronDownIcon, ExitIcon } from '@radix-ui/react-icons';
 import { Login, Logout } from '@/redux/slices/userslice';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "@/components/ui/menubar";
 import Image from 'next/image';
+import { changeLan } from "@/redux/slices/settingsSlice";
+
+
 
 
 const Playerlogincard = () => {
+
+  const dispatch = useDispatch();
+  const language = useSelector((state) => state.lan.language);
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+      dispatch(changeLan(savedLanguage));
+    }
+  }, [dispatch]);
+
+
 
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
@@ -26,7 +41,6 @@ const Playerlogincard = () => {
 
     const game = useSelector((state) => state.game.value);
     const user = useSelector((state) => state.user.user);
-    const dispatch = useDispatch();
     const [uid, setUid] = useState('');
     const [loading, setLoading] = useState(false);
     const [prevPlayers, setPrevPlayers] = useState([]);
@@ -74,19 +88,47 @@ const Playerlogincard = () => {
         setPrevPlayers(prev => prev.filter(player => player.uid !== uidToDelete));
     };
 
+    const [placeholderText, setPlaceholderText] = useState('');
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth <= 500) {
+          setPlaceholderText(language === 'en' ? 'Please enter player ID' : 'يرجى إدخال معرف اللاعب');
+        } else {
+          setPlaceholderText(language === 'en' ? 'Please enter player ID here' : 'يرجى إدخال معرف اللاعب هنا');
+        }
+      };
+  
+      handleResize(); 
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [language]);
+
+
     return (
-        <div className='w-fit mt-10 max-[736px]:w-full'>
+  <div dir={language ==='en' ? 'rtl' : 'ltr'}
+         className='w-fit mt-10 max-[736px]:w-full'>
             <div className='flex items-center justify-end gap-2 max-[736px]:w-full'>
-                {user?.loggedIn && <div className={`flex items-end max-[736px]:w-full justify-center gap-28 hover:cursor-pointer ${user ? 'max-[736px]:justify-between' : 'max-[736px]:items-start'}`}>
+                {user?.loggedIn && <div className={`flex items-end max-[736px]:w-full justify-center gap-28 hover:cursor-pointer ${user ? 'max-[736px]:justify-between' : 'max-[736px]:items-start'}`}
+                >
                     <div onClick={() => dispatch(Logout())} className='flex items-center justify-center gap-2'>
-                        <p className='text-sm font-normal text-[#d81a0d] font-ar '>تسجيل الخروج</p>
+                        <p className='text-sm font-normal text-[#d81a0d] font-ar '>
+                        {language ==='en' ? 'Sign out' : 'تسجيل الخروج'}
+                        </p>
                         <ExitIcon className='text text-[#d81a0d]' />
                     </div>
-                    <p className='text-xl font-bold font-ar '>تسجيل الدخول</p>
+                    <p className='text-xl font-bold font-ar '>
+                     {language ==='en' ? 'Login' : 'تسجيل الدخول'}
+                    </p>
                 </div>}
                 {!user.loggedIn && <div className={`flex items-end justify-center gap-28 hover:cursor-pointer ${user ? 'max-[736px]:justify-between' : 'max-[736px]:items-start'}`}>
 
-                    <p className='text-xl font-bold font-ar '>تسجيل الدخول</p>
+                    <p className='text-xl font-bold font-ar '>
+                    {language ==='en' ? 'Login' : 'تسجيل الدخول'}
+                    </p>
                 </div>
 
                 }
@@ -115,23 +157,75 @@ const Playerlogincard = () => {
 </div>
 
                 
-            </div>
-            {!user?.loggedIn ? (
+</div>
+
+{!user?.loggedIn ? (
 <div className='w-fit max-[736px]:w-full h-fit bg-[#eee] rounded-lg mt-5 gap-5 border-[#e5e7eb] border flex flex-col items-end py-4 pb-6 px-8 justify-center'>
 <div className='flex flex-col items-end justify-center gap-2 max-[736px]:w-full'>
-<p className='mr-1 text-sm font-ar  font-medium'>معرّف الاعب</p>
-<div className='w-full flex max-[736px]:w-full'>
+<div className='flex gap-1'>
+
+<button
+    type="button"
+    className="rounded-full text-sm outline-current transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2"
+  >
+    <svg
+      width="1em"
+      height="1em"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_489_1601)">
+        <path
+          d="M4.8999 5.39848C4.89981 4.44579 5.67209 3.67344 6.62478 3.67344H7.37471C8.33038 3.67344 9.09977 4.45392 9.09971 5.40371C9.09967 6.05546 8.73195 6.65677 8.14619 6.94967L7.57416 7.23571C7.49793 7.27382 7.44978 7.35173 7.44978 7.43695V7.49844C7.44978 7.78839 7.21473 8.02344 6.92478 8.02344C6.63483 8.02344 6.39978 7.78839 6.39978 7.49844V7.43695C6.39978 6.95403 6.67262 6.51255 7.10456 6.29657L7.6766 6.01053C7.90385 5.8969 8.0497 5.66087 8.04971 5.40365C8.04973 5.0279 7.74459 4.72344 7.37471 4.72344H6.62478C6.25203 4.72344 5.94987 5.02563 5.9499 5.39838C5.94993 5.68833 5.7149 5.9234 5.42495 5.92343C5.135 5.92346 4.89993 5.68843 4.8999 5.39848Z"
+          fill="currentColor"
+        />
+        <path
+          d="M6.9999 10.1484C7.3865 10.1484 7.6999 9.83504 7.6999 9.44844C7.6999 9.06184 7.3865 8.74844 6.9999 8.74844C6.6133 8.74844 6.2999 9.06184 6.2999 9.44844C6.2999 9.83504 6.6133 10.1484 6.9999 10.1484Z"
+          fill="currentColor"
+        />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M0.524902 6.99844C0.524902 3.42239 3.42386 0.523438 6.9999 0.523438C10.5759 0.523438 13.4749 3.42239 13.4749 6.99844C13.4749 10.5745 10.5759 13.4734 6.9999 13.4734C3.42386 13.4734 0.524902 10.5745 0.524902 6.99844ZM6.9999 1.57344C4.00376 1.57344 1.5749 4.00229 1.5749 6.99844C1.5749 9.99458 4.00376 12.4234 6.9999 12.4234C9.99605 12.4234 12.4249 9.99458 12.4249 6.99844C12.4249 4.00229 9.99605 1.57344 6.9999 1.57344Z"
+          fill="currentColor"
+        />
+      </g>
+      <defs>
+        <clipPath>
+          <rect width={14} height={14} fill="currentColor" />
+        </clipPath>
+      </defs>
+    </svg>
+  </button>
+
+  <p className='mr-1 text-sm font-ar  font-medium'>
+    
+    {language ==='en' ? 'Player ID' : 'معرّف الاعب'}
+  </p>
+
+  
+</div>
+
+
+<div >
+<div dir={language ==='en' ? 'rtl' : 'ltr'}  className='w-full flex max-[736px]:w-full'>
     <Button disabled={loading} onClick={handlePlayerLogin} variant='custom' size='custom'>
-        {loading ? '... تسجيل الدخول' : 'تسجيل الدخول'}
+    {loading ? (language === 'en' ? 'Login ...' : '... تسجيل الدخول') : (language === 'en' ? 'Login' : 'تسجيل الدخول')}
     </Button>
     <div className='relative max-[736px]:w-full'>
         <Input
-            dir="rtl"
+            dir={language ==='en' ? 'ltr' : 'rtl'}
             value={uid}
             onChange={(e) => setUid(e.target.value)}
-            className=' font-ar relative w-[400px] max-[736px]:w-full pl-12 rounded-tl-none rounded-bl-none  bg-white'
-            placeholder='يرجى إدخال معرف اللاعب هنا'
+            className={`oooo font-ar relative w-[400px] max-[736px]:w-full ${language === 'ar' ? 'pr-4' : 'pl-4'} rounded-tl-none rounded-bl-none bg-white`}
+            placeholder={placeholderText}
         />
+        <svg
+         className='ssss'
+         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+    <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+  </svg>
         {error.appearance && <p className='text-sm font-light mt-1 text-red-600 text-right'>{error.message}</p>}
         <Menubar>
             <MenubarMenu>
@@ -162,9 +256,17 @@ const Playerlogincard = () => {
         </Menubar>
     </div>
 </div>
-<div style={{width:"100%"}} dir="rtl" className="relative flex flex-col items-center gap-4 text-xs/normal text-text-secondary md:text-sm/[22px]">
+</div>
+
+
+
+
+<div dir={language ==='en' ? 'ltr' : 'rtl'} style={{width:"100%"}} className="relative flex flex-col items-center gap-4 text-xs/normal text-text-secondary md:text-sm/[22px]">
       <div className="flex items-center justify-between w-full mb-4">
-        <span className="flex-1">أو سجل دخولك بحساب اللعبة الخاص بك</span>
+        <span className="flex-1">
+          
+{language ==='en' ? 'Or login with your game account' : 'أو سجل دخولك بحساب اللعبة الخاص بك'}
+          </span>
         <div className="flex gap-4">
           <a
             className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 bg-[#006AFC]"
@@ -178,27 +280,29 @@ const Playerlogincard = () => {
             />
           </a>
           <a
-            className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 outline outline-1 -outline-offset-1 outline-line bg-white"
-            href="https://authgop.garena.com/universal/oauth?client_id=10017&redirect_uri=https%3A%2F%2Fshop2game.com%2F%3Fapp%3D100067&response_type=token&platform=8&locale=en-US&theme=light"
-            onClick={handleClick}
-          >
-            <img
-              className="h-5 w-5"
-              src="https://cdn-gop.garenanow.com/gop/mshop/www/live/assets/ic-google-d2ceaa95.svg"
-              alt="Google logo"
-            />
-          </a>
-          <a
-            className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 outline outline-1 -outline-offset-1 outline-line bg-white"
-            href="https://authgop.garena.com/universal/oauth?client_id=10017&redirect_uri=https%3A%2F%2Fshop2game.com%2F%3Fapp%3D100067&response_type=token&platform=11&locale=en-US&theme=light"
-            onClick={handleClick}
-          >
-            <img
-              className="h-5 w-5"
-              src="https://cdn-gop.garenanow.com/gop/mshop/www/live/assets/ic-twitter-92527e61.svg"
-              alt="Twitter logo"
-            />
-          </a>
+  className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 bg-white"
+  href="https://authgop.garena.com/universal/oauth?client_id=10017&redirect_uri=https%3A%2F%2Fshop2game.com%2F%3Fapp%3D100067&response_type=token&platform=8&locale=en-US&theme=light"
+  onClick={handleClick}
+>
+  <img
+    className="h-5 w-5"
+    src="https://cdn-gop.garenanow.com/gop/mshop/www/live/assets/ic-google-d2ceaa95.svg"
+    alt="Google logo"
+  />
+</a>
+
+<a
+  className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 bg-white"
+  href="https://authgop.garena.com/universal/oauth?client_id=10017&redirect_uri=https%3A%2F%2Fshop2game.com%2F%3Fapp%3D100067&response_type=token&platform=11&locale=en-US&theme=light"
+  onClick={handleClick}
+>
+  <img
+    className="h-5 w-5"
+    src="https://cdn-gop.garenanow.com/gop/mshop/www/live/assets/ic-twitter-92527e61.svg"
+    alt="Twitter logo"
+  />
+</a>
+
           <a
             className="shrink-0 rounded-full p-1.5 transition-opacity hover:opacity-70 bg-[#0077FF]"
             href="https://authgop.garena.com/universal/oauth?client_id=10017&redirect_uri=https%3A%2F%2Fshop2game.com%2F%3Fapp%3D100067&response_type=token&platform=5&locale=en-US&theme=light"
@@ -220,18 +324,26 @@ const Playerlogincard = () => {
     </div>
 
                     </div>
-                </div>
+</div>
             ) : (
                 <div className='w-fit max-[736px]:w-full h-fit bg-[#eee] rounded-lg mt-5 gap-5 border-[#e5e7eb] border flex flex-col items-end py-4 pb-6 px-8 justify-center'>
                     <div className='hover:cursor-pointer w-full flex items-center gap-20 justify-between px-2 py-2'>
                         <div className='flex flex-col gap-2'>
                             <div className='flex gap-1'>
                                 <p>{user?.name}</p>
-                                <p className='font-semibold font-ar '>: اسم المستخدم</p>
+                                <p className='font-semibold font-ar '>
+                                  
+      {language ==='en' ? 'Username :' : ': اسم المستخدم'}
+                                  </p>
                             </div>
                             <div className='flex gap-1'>
                                 <p className='text-[#888] text-sm'>{user?.uid}</p>
-                                <p className='text-[#888] text-sm font-ar '>: معرّف الاعب</p>
+                                <p className='text-[#888] text-sm font-ar '>
+
+
+{language ==='en' ? 'Player ID :' : ': معرّف الاعب '}
+
+</p>
                             </div>
                         </div>
                         {user.game === 'freefire' ? (
@@ -242,7 +354,7 @@ const Playerlogincard = () => {
                     </div>
                 </div>
             )}
-        </div>
+    </div>
     );
 };
 
@@ -257,17 +369,24 @@ const PreviousPlayers = ({ name, id, game, onDelete }) => {
     };
 
     return (
-        <div className='hover:cursor-pointer w-full flex items-center gap-10 justify-between px-2 py-2'>
+        <div
+         className='hover:cursor-pointer w-full flex items-center gap-10 justify-between px-2 py-2'>
             <Cross2Icon onClick={handleDelete} />
             <div className='flex gap-2 items-center justify-center'>
                 <div className='flex flex-col items-center justify-center'>
                     <div className='flex gap-1'>
                         <p>{name}</p>
-                        <p className='font-semibold font-ar '>: اسم المستخدم</p>
+                        <p className='font-semibold font-ar '>
+                        {language ==='en' ? 'Username :' : ': اسم المستخدم'}
+
+                          </p>
                     </div>
                     <div className='flex gap-1'>
                         <p className='text-[#888] text-sm'>{id}</p>
-                        <p className='text-[#888] text-sm font-ar '>: معرّف الاعب</p>
+                        <p className='text-[#888] text-sm font-ar '>
+                        {language ==='en' ? 'Player ID :' : ': معرّف الاعب '}
+
+                          </p>
                     </div>
                 </div>
                 {game === 'freefire' ? (

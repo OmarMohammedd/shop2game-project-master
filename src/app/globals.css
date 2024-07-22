@@ -2,6 +2,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/metropolis-2');
 
 @tailwind base;
 @tailwind components;
@@ -81,16 +82,140 @@
   }
 }
 
+body {
+  margin: 0;
+  font-family: Metropolis, Noto Sans Thai, Noto Sans Arabic, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji" !important;
+  overflow-x: hidden;
+  
+}
+
+body, p, h1, h2, h3, h4, h5, h6, span, div, a, li, td, th, input, button {
+  font-family: Metropolis, Noto Sans Thai, Noto Sans Arabic, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji" !important;
+}
+
+
+.ddd {
+  text-align: left;
+}
+
+button.active {
+  border: 1px solid red;
+}
 
 body {
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  max-width: 100vw;
 }
-@media (max-width:500px) {
-  .listtt {
-      position: absolute;
-      left: -4rem !important;
-      width: 100vw;
+
+
+.fixed-header {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; 
+  height: 56px; 
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+
+/* E */
+/* @media (max-width: 500px) {
+  [dir="ltr"] .listtt {
+
+    right: -3.4rem !important; 
+    width: 100vw;
   }
+} */
+@media (max-width: 760px) {
+  .fgfg button{
+    width: 100%;
+    margin: auto;
+  }
+}
+
+.oddd {
+  width: 270px;
+}
+.fdds {
+  background-color: #fff;
+}
+
+ .fgfg button {
+  font-size: 17px;
+  line-height: 1;
+  padding: .625rem;
+  border-radius: .125rem;
+ }
+ @media (max-width: 768px) {
+  .ooddd {
+    padding-right: 7px;
+    padding-bottom: 7px;
+  }
+  [dir="rtl"] .ooddd {
+     padding: 10px;
+  }
+ }
+@media (max-width: 500px) {
+  .ooddd {
+    padding-right: 7px;
+    padding-bottom: 7px;
+  }
+  .ssss {
+    display: none;
+  }
+  [dir="rtl"] .oooo {
+    padding-left: 7px !important;
+  }
+  [dir="ltr"] .oooo {
+    padding-right: 7px !important;
+  }
+}
+[dir="ltr"] .ssss {
+  width: 15px;
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+}
+[dir="rtl"] .ssss {
+  width: 15px;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+@media (min-width: 500px) {
+  .closee {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .closee {
+    display: block;
+    width: 16px;
+    cursor: pointer;
+  }
+  .listtt {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: auto;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    z-index: 1000; 
+    background: white; 
+    display: flex;
+    flex-direction: column;
+  }
+
 }
 
 .save {
@@ -123,6 +248,7 @@ body {
   --tw-text-opacity: 1 !important;
   color: rgb(216 26 13 / calc(1 * 1)) !important;
 }
+
 
       .b200794__DaXa7.b200794__Kt1BS {
         margin: 8px 0;

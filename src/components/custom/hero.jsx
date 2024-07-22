@@ -1,15 +1,37 @@
 'use client'
-import React from 'react';
-import Image
-    from 'next/image';
-import { useSelector } from 'react-redux'
+import { changeLan } from "@/redux/slices/settingsSlice";
+import React, { useEffect, useState } from "react";
+import Image from 'next/image';
+import { useDispatch, useSelector } from "react-redux";
+
 const Hero = () => {
+
+
+  const dispatch = useDispatch();
+  const language = useSelector((state) => state.lan.language);
+
+  const handleChangeLanguage = (lan) => {
+    localStorage.setItem('selectedLanguage', lan);
+    dispatch(changeLan(lan));
+    console.log(lan);
+  };
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+      dispatch(changeLan(savedLanguage));
+    }
+  }, [dispatch]);
+
+
+
     const game = useSelector((state) => state.game.value)
 
     
     return (
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col" style={{paddingTop:"56px"}}>
       <div className="bg-[#151515]">
+        
         <div className="group mx-auto w-full max-w-[1366px] md:py-2.5 lg:py-5">
           <div className="relative flex justify-center pt-[43.478%] md:pt-[19.106%]">
             <div className="scrollbar-none absolute inset-0 flex overflow-auto justify-center">
@@ -21,12 +43,16 @@ const Hero = () => {
               {
       game === 'freefire' && <img
       className="pointer-events-none h-full w-full object-contain transition-all md:rounded-xl"
-      src="https://contentgarena-a.akamaihd.net/GOP/newshop_banners/Shop2gameMainBanner_AR_EG_PC_20210511.jpg?v=1699518934"
+
+      
+      src= {language === 'en' ? "https://contentgarena-a.akamaihd.net/GOP/newshop_banners/Shop2gameMainBanner_EN_IQ_PC.jpg?v=1699519630" : "https://contentgarena-a.akamaihd.net/GOP/newshop_banners/Shop2gameMainBanner_AR_EG_PC_20210511.jpg?v=1699518934"} 
     />
   }
+
   {
       game === 'blackclover' && <Image src='/assets/main-bannner2.jpg' alt='main-banner' height={700} width={700} />
   }
+  
               </a>
             </div>
             <div className="pointer-events-none absolute inset-y-0 hidden w-[21.783%] items-center from-[#151515] md:flex start-0 justify-end bg-gradient-to-r rtl:bg-gradient-to-l"></div>
@@ -53,7 +79,10 @@ const Hero = () => {
               }}
             ></div>
           </div>
-          <div
+
+{/* style={{
+  display: language === 'en' ? 'none' : '' }} */}
+          <div 
             className="pointer-events-none absolute inset-0 flex rtl:-scale-x-100 rtl:flex-row-reverse"
             role="none"
           >
